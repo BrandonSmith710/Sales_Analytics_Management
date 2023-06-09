@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    </head>
+    <body style="background-color:rgb(228, 255, 253);">
+        <div style="margin-left:8%;margin-right:8%;padding-top:45px;padding-bottom:15px;">
+            <h2>Null Hypothesis: {{ null_hypoth }}</h2>
+        </div>
+        <div style="margin-left:8%;margin-right:8%;">
+            {% if p_val < sign_lvl %}
+                <h2>
+                    Using a significance level of .05, the null hypothesis is rejected in finding {{ res }}
+                </h2>
+            {% else %}
+                <h2>
+                    Using a significance level of .05, the null hypothesis is not rejected in finding {{ res }}
+                </h2>
+            {% endif %}
+        <div style="padding-top:15px;padding-bottom:15px;">
+            <h2>P-Value: {{ p_val }}</h2>
+        </div>
+        </div>
+        <div style="margin-left:45%;">
+        <form action="/statistical_test_res" method="post">
+            <button type="submit">Home</button>
+            <button name="test" type="submit">Test Again</button>
+        </form>
+        </div>
+    </body>
+</html>

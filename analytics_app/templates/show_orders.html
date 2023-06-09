@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title> window.onload() </title>
+    <script src="https://cdn.plot.ly/plotly-2.20.0.min.js" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename="js/script.js") }}"></script>
+    <script src="{{ url_for('static', filename="css/data.js") }}"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://unpkg.com/jeezy@1.12.11/lib/jeezy.min.js"></script>
+    <script src="https://unpkg.com/data2grid@1.0.0/build/data2grid.min.js"></script>
+</head>
+<body style="background-color:rgb(223, 250, 253);">
+    <div style="width:45%;height:100px;float:left;">
+        <div style="margin-left:5%;float:left;color:darkgrey;padding-bottom:2px;">
+            <div>
+                <h2 style="height:10px;">Sales Analytics Management</h2>
+            </div>
+            <div>
+                <h4>Software by Brandon Smith</h4>
+            </div>
+        </div>
+        <div style="margin-left:94%;padding-top:15px;width:30px;">
+            <form action="/show_orders" method="post">
+                <div style="padding-bottom:2px;"><input type="button" value='Top 5 Profiles' onclick="msg()"></input></div>
+                <div style="padding-bottom:2px;margin-left:7px;"><button name="hypothesis_test">Hypothesis Test</button></div>
+                <div style="padding-bottom:2px;margin-left:20px;"><button name="show_client">View Profile</button></div>
+                <div style="padding-bottom:2px;margin-left:22px;"><button name="place_order">Place Order</button></div>
+                <div style="margin-left:21px;"><button type="submit">Home</button></div>
+
+            </form>
+        </div>
+        <div style="padding-top:25px;">
+        </div>
+        <div style="margin-left:5%;height:1100px;overflow:hidden;overflow-y:scroll;">
+        {% block content %}
+            <table id="data" class="table table-striped" style="border-collapse:collapse;">
+                <thead>
+                <tr>
+                    <th style="position:sticky;top:0px;background-color:white;">Client ID</th>
+                    <th style="position:sticky;top:0px;background-color:white;">Name</th>
+                    <th style="position:sticky;top:0px;background-color:white;">Age</th>
+                    <th style="position:sticky;top:0px;background-color:white;">Order ID</th>
+                    <th style="position:sticky;top:0px;background-color:white;">Cost</th>
+                    <th style="position:sticky;top:0px;background-color:white;">Item Count</th>
+                    <th style="position:sticky;top:0px;background-color:white;">Date Ordered</th>
+                </tr>
+                </thead>
+                <tbody id='table1'>
+                {% for order in order_list %}
+                    <tr>
+                    <td style="background-color:lightblue;padding:8px 16px;">{{ order[0][1] }}</td>
+                    <td style="background-color:lightblue;padding:8px 16px;">{{ order[1][1] }}</td>
+                    <td style="background-color:lightblue;padding:8px 16px;">{{ order[2][1] }}</td>
+                    <td style="background-color:lightblue;padding:8px 16px;">{{ order[3][1] }}</td>
+                    <td style="background-color:lightblue;padding:8px 16px;">${{ order[4][1] }}</td>
+                    <td style="background-color:lightblue;padding:8px 16px;">{{ order[5][1] }}</td>
+                    <td style="background-color:lightblue;padding:8px 16px;">{{ order[6][1] }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endblock %}
+        </div>
+    </div>
+    <div id="plot1" style="margin-left:50%;height:275px;"></div>
+    <div id="plot2" style="margin-left:50%;height:275px;"></div>
+    <div id="plot3" style="margin-left:50%;height:475px;"></div>
+    <div id="plot4" style="margin-left:50%;height:275px;"></div>
+    <div id="plot5" style="margin-left:50%;height:415px;"></div>
+    <div id="plot6" style="margin-left:50%;height:275px;"></div>
+    <body>
+    <div>
+        <script type="text/javascript">
+            window.onload = function beginFunc() {
+                                const table1 = document.getElementById("table1");
+                                table1.addEventListener(
+                                    "mouseover",
+                                    (event) => {
+                                        event.target.style.color = "silver";
+                                    },
+                                    false
+                                );
+                                table1.addEventListener(
+                                    "mouseout",
+                                    (event) => {
+                                        event.target.style.color = "";   
+                                    },
+                                    false
+                                );
+                                
+                            };
+
+            function msg() {
+                var clients = {{ top_5_clients | tojson | safe }};
+                alert(clients);
+            };
+            var products = {{ top_5_products | tojson | safe }};
+            var productCounts = {{ top_5_quantities }};
+            var timeList = {{ time_list | tojson | safe }};
+            var timeCounts = {{ time_counts }};
+            var daysOfWeek = {{ days_of_week }};
+            var dayCounts = {{ day_counts }};
+            var stateList = {{ state_list | tojson | safe }};
+            var stateVolume = {{ state_volume }};
+            var cityList = {{ city_list | tojson | safe }};
+            var cityVolume = {{ city_volume }};
+            var latitudes = {{ latitudes }};
+            var longitudes = {{ longitudes }};
+            var pastSpendings = {{ past_spendings }};
+            plot3 = document.getElementById('plot3');
+            plotSales(products, productCounts);
+            plotTimes(timeList, timeCounts);
+            plotDaysOfWeek(daysOfWeek, dayCounts);
+            plotStateCounts(stateList, stateVolume);
+            plotBubbleMap(plot3, latitudes, longitudes, cityVolume); 
+        </script>
+
+    </div>
+</body>
+</html>

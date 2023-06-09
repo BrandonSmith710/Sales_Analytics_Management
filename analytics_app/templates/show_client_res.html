@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <script src="{{ url_for('static', filename="js/script.js") }}"></script>
+        <script src="https://cdn.plot.ly/plotly-2.20.0.min.js" charset="utf-8"></script>
+    </head>
+    <body style="background-color:rgb(223, 250, 253);">
+        <h1>{{ client_name }}</h1>
+        <h2>{{ client_state }}</h2>
+        <h2>{{ client_city }}</h2>
+        <h2>{{ payment_method }}</h2>
+        <h2>Most Recent Location: {{ lat }},  {{ lon }}</h2>
+        <div class="container col-md-3">
+            <form action={{ action }} method='post'>
+                <button type="submit" name="home" class="btn btn-primary">Home</button>
+                <button type="submit" name="view_again" class="btn btn-primary">Search Again</button>
+                <button type="submit" name="show_orders" class="btn btn-primary">Analytics</button>
+            </form>
+        </div>
+        <div id="plot1" style="margin-left:50%;height:475px;"></div>
+        <script type="text/javascript">
+            plot1 = document.getElementById('plot1');
+            var cityVolume = {{ city_volume }};
+            var latitudes = {{ latitudes }};
+            var longitudes = {{ longitudes }};
+            plotBubbleMap(plot1, latitudes, longitudes, cityVolume);
+        </script>
+    </body>
+</html>
